@@ -44,7 +44,7 @@ class DB {
         );
     }
 
-    // Update employee role
+    // Update employee role query
     updateEmployeeRole = (employeeId, roleId) => {
         const input = [roleId, employeeId];
         return this.connection.promise().query(
@@ -52,12 +52,33 @@ class DB {
         );
     }
 
-    // Update Employee Manager
+    // Update Employee Manager query
     updateEmployeeManager = (employeeId, managerId) => {
         const input = [managerId, employeeId];
         return this.connection.promise().query(
             "UPDATE employee SET manager_id = ? WHERE id = ?",  input
         );
+    }
+
+    // Query to view Employees by Manager
+    viewEmployeesByManager = (managerId) => {
+        return this.connection.promise().query(
+            "Select employee.id, employee.first_name, employee.last_name, role.title AS job_title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE employee.manager_id = ?;", managerId
+        )
+    }
+
+    // Query to view Employees by department
+    viewEmployeesByDepartment = (roleId) => {
+        return this.connection.promise().query(
+            "Select employee.id, employee.first_name, employee.last_name, role.title AS job_title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE department.id = ?", roleId
+        )
+    }
+
+    // query to view total utilized budget for given department
+    totalUtilizedBudget = (departmentid) => {
+        return this.connection.promis().query =(
+            "Select role.department_id, department.name AS department, SUM(role.salary) AS total_budget FROM Department JOIN role ON department.id = role.department_id WHERE role.department_id = 3 GROUP BY role.department_id", departmentid
+        )
     }
 
 }
