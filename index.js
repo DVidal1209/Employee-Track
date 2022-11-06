@@ -1,4 +1,6 @@
 const logo = require('asciiart-logo');
+require("console.table");
+
 // asciiart logo information
 const logoText = {
         name: 'Employee Tracker',
