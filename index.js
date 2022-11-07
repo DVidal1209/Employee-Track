@@ -106,8 +106,7 @@ loadPrompts = () => {
                 })
                 break;
             case "Add_Department":
-                inquirer
-                .prompt([
+                prompt([
                     {
                         type: "input",
                         name: "Department",
