@@ -91,8 +91,9 @@ class DB {
 
     // Delete Employee query
     deleteEmployee = (id) => {
+        console.log(id)
         return this.connection.promise().query(
-            "DELETE FROM employee WHERE employee_id = ?", [parseInt(id)]
+            "DELETE FROM employee WHERE id = ?", [id]
         )
     }
 

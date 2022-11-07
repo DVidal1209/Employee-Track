@@ -233,7 +233,6 @@ loadPrompts = () => {
                         name: `${first_name} ${last_name}`,
                         value: id
                     }))
-                    // console.log(employees);
                     prompt([
                         {
                             name: "employee",
@@ -387,10 +386,70 @@ loadPrompts = () => {
                 })
                 break;
             case "Delete_Employee":
+                db.viewAllEmployees()
+                .then(([response]) => {
+                    const employees = response.map (({id, first_name, last_name}) => ({
+                        name: `${first_name} ${last_name}`,
+                        value: id
+                    }))
+                    prompt([
+                        {
+                            name: "employee",
+                            type: "list",
+                            message: "Select Employee to delete",
+                            choices: employees
+                        }
+                    ])
+                    .then ((response) => {
+                        db.deleteEmployee(response.employee);
+                        console.log("Employee successfully deleted");
+                        loadPrompts();
+                    })
+                })
                 break;
             case "Delete_Department":
+                db.viewAllDepartments()
+                .then(([response]) => {
+                    const departments = response.map (({id, name}) => ({
+                        name: name,
+                        value: id
+                    }))
+                    prompt([
+                        {
+                            name: "department",
+                            type: "list",
+                            message: "Select Department to delete",
+                            choices: departments
+                        }
+                    ])
+                    .then((response) => {
+                        db.deleteDepartment(response.department);
+                        console.log("Department successfully deleted");
+                        loadPrompts();
+                    })
+                })
                 break;
             case "Delete_Role":
+                db.viewAllRoles()
+                .then(([response]) => {
+                    const roles = response.map (({role_id, title}) => ({
+                        name: title,
+                        value: role_id
+                    }))
+                    prompt([
+                        {
+                            name: "role",
+                            type: "list",
+                            message: "Select Role to delete",
+                            choices: roles
+                        }
+                    ])
+                    .then((response) => {
+                        db.deleteRole(response.role);
+                        console.log("Role successfully Deleted");
+                        loadPrompts();
+                    })
+                })
                 break;
             case "Quit":
                 console.log("Goodbye!");
