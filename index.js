@@ -1,6 +1,6 @@
 const logo = require('asciiart-logo');
 const DB = require ('./config/index')
-const {prompt} = require("inquirer");
+const {prompt, default: inquirer} = require("inquirer");
 const questions = [
     {
         name: "View all Departments",
@@ -59,8 +59,8 @@ const questions = [
         value: "Delete_Role"
     }
 ]
-require("console.table");
 
+require("console.table");
 // asciiart logo information
 const logoText = {
         name: 'Employee Tracker',
@@ -92,10 +92,38 @@ loadPrompts = () => {
                 })
                 break;
             case "View_Roles":
+                DB.viewAllRoles()
+                .then(([response]) => {
+                    console.table(response);
+                    loadPrompts();
+                })
                 break;
             case "View_Employees":
+                DB.viewAllEmployees()
+                .then(([response]) => {
+                    console.table(response);
+                    loadPrompts();
+                })
                 break;
             case "Add_Department":
+                inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        name: "Department",
+                        message: "Enter Department Name"
+                    }
+                    .then((response) => {
+                        let name = response.name;
+                        DB.insertDepartment(name)
+                        .then (() => {
+                            console.log(`Added ${name} to the department table`);
+                        })
+                        .then (() => {
+                            loadPrompts();
+                        })
+                    })
+                ])
                 break;
             case "Add_Role":
                 break;

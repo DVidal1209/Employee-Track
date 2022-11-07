@@ -28,6 +28,14 @@ class DB {
         )
     }
 
+
+    // Insert new Department query
+    insertDepartment = (name) => {
+        return this.connection.promise().query(
+            "INSERT INTO department(name) VALUE (?)", [name]
+        )
+    }
+
     // Insert new role query
     insertRole = (title, salary, departmentId) =>{
         const input = [title, parseFloat(salary), parseInt(departmentId)];
