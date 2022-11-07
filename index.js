@@ -57,6 +57,10 @@ const questions = [
     {
         name: "Remove a Role from the Database",
         value: "Delete_Role"
+    },
+    {
+        name: "quit",
+        value: "Quit"
     }
 ]
 
@@ -186,7 +190,6 @@ loadPrompts = () => {
                         name: title,
                         value: role_id
                     }))
-                    console.log(roleChoices);
                     prompt([
                         {
                             type: "list",
@@ -224,6 +227,47 @@ loadPrompts = () => {
                 })
                 break;
             case "Update_Employee_Role":
+                db.viewAllEmployees()
+                .then(([response]) => {
+                    const employees = response.map (({id, first_name, last_name}) => ({
+                        name: `${first_name} ${last_name}`,
+                        value: id
+                    }))
+                    // console.log(employees);
+                    prompt([
+                        {
+                            name: "employee",
+                            type: "list",
+                            message: "Select Employee",
+                            choices: employees
+                        }
+                    ])
+                    .then ((response) => {
+                        // const name = response.employee.name; 
+                        const employee = response.employee;
+                        console.log(employee)
+                        db.viewAllRoles()
+                        .then(([response]) => {
+                            const roles = response.map(({role_id, title}) => ({
+                                name: title,
+                                value: role_id
+                            }))
+                            prompt([
+                                {
+                                    name: "role",
+                                    message: "Select Employee's Role",
+                                    type: "list",
+                                    choices: roles
+                                }
+                            ])
+                            . then ((response) => {
+                                db.updateEmployeeRole(employee, response.role)
+                                console.log(`Successfully changed Employee's role`)
+                                loadPrompts();
+                            })
+                        })
+                    })
+                })
                 break;
             case "Update_Employee_Manager":
                 break;
@@ -239,6 +283,9 @@ loadPrompts = () => {
                 break;
             case "Delete_Role":
                 break;
+            case "Quit":
+                console.log("Goodbye!");
+                process.exit();
         }
     })
 }
