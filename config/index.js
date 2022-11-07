@@ -10,7 +10,7 @@ class DB {
       // View all Departments query
     viewAllDepartments = () => {
         return this.connection.promise().query(
-            "SELECT id, name FROM department"
+            "SELECT id, name FROM department;"
         )
     }
 

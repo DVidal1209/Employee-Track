@@ -19,8 +19,8 @@
   "dependencies": {
     "asciiart-logo": "^0.2.6",
     "console.table": "^0.10.0",
+    "dotenv": "^16.0.3",
     "inquirer": "^8.2.4",
-    "mysql2": "^3.0.0-rc.1",
-    "sequelize": "^6.25.4"
+    "mysql2": "^3.0.0-rc.1"
   }
 }
