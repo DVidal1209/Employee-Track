@@ -270,6 +270,37 @@ loadPrompts = () => {
                 })
                 break;
             case "Update_Employee_Manager":
+                db.viewAllEmployees()
+                .then(([response]) => {
+                    const employees = response.map (({id, first_name, last_name}) => ({
+                        name: `${first_name} ${last_name}`,
+                        value: id
+                    }))
+                    prompt([
+                        {
+                            type: "list",
+                            message: "Select Employee",
+                            name: "employee",
+                            choices: employees
+                        }
+                    ])
+                    .then ((response) => {
+                        const employee = response.employee;
+                        prompt([
+                            {
+                                type: "list",
+                                message: "Select Manager",
+                                name: "manager",
+                                choices: employees
+                            }
+                        ])
+                        .then ((response) => {
+                            db.updateEmployeeManager(employee, response.manager)
+                            console.log("Manager successfulyl changed")
+                            loadPrompts();
+                        })
+                    })
+                })
                 break;
             case "View_Employees_By_Manager":
                 break;
