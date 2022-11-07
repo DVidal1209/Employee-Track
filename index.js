@@ -59,7 +59,7 @@ const questions = [
         value: "Delete_Role"
     },
     {
-        name: "quit",
+        name: "Quit",
         value: "Quit"
     }
 ]
@@ -251,7 +251,6 @@ loadPrompts = () => {
                     .then ((response) => {
                         // const name = response.employee.name; 
                         const employee = response.employee;
-                        console.log(employee)
                         db.viewAllRoles()
                         .then(([response]) => {
                             const roles = response.map(({role_id, title}) => ({
@@ -387,7 +386,6 @@ loadPrompts = () => {
                         }
                     ])
                     .then ((response) => {
-                        console.log(response.department);
                         db.totalUtilizedBudget(response.department)
                         .then(([response]) => {
                             console.table(response);
