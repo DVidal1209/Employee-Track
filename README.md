@@ -32,7 +32,9 @@ Once done you will have to run 2 sql files in order to create the database. To d
 
     "source db/seed.sql"
 
-Once done you can go ahead and exit the sql termina and execute the line "node run index.js".
+Once done you can go ahead and exit the sql terminal and execute these lines in order : 
+    "npm install"
+    "node index.js"
 
 From here you may follow the instructions on screen to use the application.
  
