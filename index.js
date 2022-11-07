@@ -75,7 +75,7 @@ const logoText = {
         logoColor: 'burnt-orange',
 }
 
-
+// Function to load the questions
 loadPrompts = () => {
     prompt ([
         {
@@ -88,6 +88,7 @@ loadPrompts = () => {
     .then((response) => {
         let selection = response.selection;
         switch (selection){
+            // Case to see all departments
             case "View_Departments":
                 db.viewAllDepartments()
                 .then(([response]) => {
@@ -95,6 +96,7 @@ loadPrompts = () => {
                     loadPrompts();
                 })
                 break;
+            // Case to view all roles
             case "View_Roles":
                 db.viewAllRoles()
                 .then(([response]) => {
@@ -102,6 +104,7 @@ loadPrompts = () => {
                     loadPrompts();
                 })
                 break;
+            // Case to view all Employees
             case "View_Employees":
                 db.viewAllEmployees()
                 .then(([response]) => {
@@ -109,6 +112,7 @@ loadPrompts = () => {
                     loadPrompts();
                 })
                 break;
+            // Case to add a new department
             case "Add_Department":
                 prompt([
                     {
@@ -128,6 +132,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to add a new role
             case "Add_Role":
                 prompt([
                     {
@@ -168,6 +173,7 @@ loadPrompts = () => {
                             )
                         })
                 break;
+            // Case to add a new Employee
             case "Add_Employee":
                 prompt([
                     {
@@ -226,6 +232,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to Update an Employee's Role
             case "Update_Employee_Role":
                 db.viewAllEmployees()
                 .then(([response]) => {
@@ -268,6 +275,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to Update an Employees Manager
             case "Update_Employee_Manager":
                 db.viewAllEmployees()
                 .then(([response]) => {
@@ -301,6 +309,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to View Employees by given manager
             case "View_Employees_By_Manager":
                 db.viewAllEmployees()
                 .then(([response]) => {
@@ -330,6 +339,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to view employees by given Department
             case "View_Employees_By_Department":
                 db.viewAllDepartments()
                 .then(([response]) => {
@@ -360,6 +370,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to view total utilized budget of a given Department
             case "Total_Utilized_Budget":
                 db.viewAllDepartments()
                 .then(([response]) => {
@@ -385,6 +396,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to Delete an Employee
             case "Delete_Employee":
                 db.viewAllEmployees()
                 .then(([response]) => {
@@ -407,6 +419,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to Delete a Department
             case "Delete_Department":
                 db.viewAllDepartments()
                 .then(([response]) => {
@@ -429,6 +442,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to Delete a Role
             case "Delete_Role":
                 db.viewAllRoles()
                 .then(([response]) => {
@@ -451,6 +465,7 @@ loadPrompts = () => {
                     })
                 })
                 break;
+            // Case to Exit program
             case "Quit":
                 console.log("Goodbye!");
                 process.exit();
@@ -458,6 +473,7 @@ loadPrompts = () => {
     })
 }
 
+// Function to start the app
 init = () => {
     console.log(logo(logoText).render());
     loadPrompts();
