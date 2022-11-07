@@ -48,7 +48,7 @@ class DB {
     insertEmployee = (firstName, lastName, role, manager) => {
         const input = [firstName, lastName, role, manager];
         return this.connection.promise().query(
-            "INSERT INTO employee(first_name, last_name, role, manager) VALUES (?,?,?,?)" , input
+            "INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)" , input
         );
     }
 

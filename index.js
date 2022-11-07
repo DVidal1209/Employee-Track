@@ -1,5 +1,5 @@
 const logo = require('asciiart-logo');
-const DB = require ('./config/index')
+const db = require ('./config/index')
 const {prompt, default: inquirer} = require("inquirer");
 const questions = [
     {
@@ -85,21 +85,21 @@ loadPrompts = () => {
         let selection = response.selection;
         switch (selection){
             case "View_Departments":
-                DB.viewAllDepartments()
+                db.viewAllDepartments()
                 .then(([response]) => {
                     console.table(response);
                     loadPrompts();
                 })
                 break;
             case "View_Roles":
-                DB.viewAllRoles()
+                db.viewAllRoles()
                 .then(([response]) => {
                     console.table(response);
                     loadPrompts();
                 })
                 break;
             case "View_Employees":
-                DB.viewAllEmployees()
+                db.viewAllEmployees()
                 .then(([response]) => {
                     console.table(response);
                     loadPrompts();
@@ -115,7 +115,7 @@ loadPrompts = () => {
                 ])
                 .then(async(response) => {
                     const name = response.Department;
-                    DB.insertDepartment(name)
+                    db.insertDepartment(name)
                     .then (() => {
                         console.log(`Added ${name} to the department table`);
                     })
@@ -140,7 +140,7 @@ loadPrompts = () => {
                 .then ((response) => {
                     let answerTitle = response.title;
                     let answerSalary = response.salary;
-                    DB.viewAllDepartments()
+                    db.viewAllDepartments()
                     .then(([response]) => {
                         const depChoices = response.map(({id, name}) => ({
                             name: name,
@@ -154,7 +154,7 @@ loadPrompts = () => {
                                 choices: depChoices
                             }])
                             .then ((response) => {
-                                DB.insertRole(answerTitle, answerSalary, response.role)
+                                db.insertRole(answerTitle, answerSalary, response.role)
                                 .then (() => {
                                     console.log(`Added ${answerTitle} to the role table`)
                                     loadPrompts();
@@ -165,6 +165,63 @@ loadPrompts = () => {
                         })
                 break;
             case "Add_Employee":
+                prompt([
+                    {
+                        type: "input",
+                        message: "Enter Employee First Name",
+                        name: "First_Name"
+                    },
+                    {
+                        type: "input",
+                        message: "Enter Employee Last Name",
+                        name: "Last_Name"
+                    }
+                ])
+                .then((response) => {
+                const fName = response.First_Name;
+                const lName = response.Last_Name;
+                db.viewAllRoles()
+                .then(([response])=> {
+                    const roleChoices = response.map (({title, role_id}) => ({
+                        name: title,
+                        value: role_id
+                    }))
+                    console.log(roleChoices);
+                    prompt([
+                        {
+                            type: "list",
+                            message: "Select Employee Role",
+                            name: "role",
+                            choices: roleChoices
+                        }])
+                        .then((response) => {
+                            const selectedRole = response.role;
+                            db.viewAllEmployees()
+                            .then(([response]) => {
+                                const managers = response.map(({id, first_name, last_name}) => ({
+                                    name: first_name + " " + last_name,
+                                    value: id
+                                }))
+                                prompt([
+                                    {
+                                        type: "list",
+                                        message: "Select Employee's Manager",
+                                        name: "manager",
+                                        choices: managers
+                                    }
+                                ])
+                                .then ((response) => {
+                                    let manager = response.manager;
+                                    db.insertEmployee(fName, lName, selectedRole, manager)
+                                    .then(() => {
+                                        console.log(`added ${fName} ${lName} to employee table`);
+                                        loadPrompts();
+                                    })
+                                })
+                            })
+                        })
+                    })
+                })
                 break;
             case "Update_Employee_Role":
                 break;
