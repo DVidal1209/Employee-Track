@@ -18,6 +18,14 @@ This application allows users to view and manage information about, employes, em
 ## Installation
 In order to install this application all you need to do is extract it to your desired location. In order to run this program you will need to have both node and mysql installed on your computer.
 
+This application uses a .env file in order to store login information for mysql. In order to get this to work corrently rename the .env.Example file to .env and the edit in your credentials. ie : 
+
+DB_HOST: your host default is localhost
+
+DB_PASSWORD= default is blank
+
+DB_USER=defalt is root
+
 MySQL can be found [here](https://dev.mysql.com/downloads/mysql/)
 
 Node can be found [here](https://nodejs.org/en/download/)
