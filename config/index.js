@@ -83,9 +83,9 @@ class DB {
     }
 
     // query to view total utilized budget for given department
-    totalUtilizedBudget = (departmentid) => {
-        return this.connection.promise().query =(
-            "Select role.department_id, department.name AS department, SUM(role.salary) AS total_budget FROM Department JOIN role ON department.id = role.department_id WHERE role.department_id = ? GROUP BY role.department_id", [departmentid]
+    totalUtilizedBudget = (departmentId) => {
+        return this.connection.promise().query(
+            "Select role.department_id, department.name AS department, SUM(role.salary) AS total_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE role.department_id = ? GROUP BY role.department_id", [departmentId]
         )
     }
 

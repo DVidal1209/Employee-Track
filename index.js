@@ -1,6 +1,6 @@
 const logo = require('asciiart-logo');
 const db = require ('./config/index')
-const {prompt, default: inquirer} = require("inquirer");
+const {prompt} = require("inquirer");
 const questions = [
     {
         name: "View all Departments",
@@ -35,11 +35,11 @@ const questions = [
         value: "Update_Employee_Manager"
     },
     {
-        name: "View Employees sorted under given Manager",
+        name: "View Employees under given Manager",
         value: "View_Employees_By_Manager"
     },
     {
-        name: "View Employees sorted in given Department",
+        name: "View Employees in given Department",
         value: "View_Employees_By_Department"
     },
     {
@@ -303,10 +303,88 @@ loadPrompts = () => {
                 })
                 break;
             case "View_Employees_By_Manager":
+                db.viewAllEmployees()
+                .then(([response]) => {
+                    const managers = response.map (({id, first_name, last_name}) => ({
+                        name: `${first_name} ${last_name}`,
+                        value: id
+                    }))
+                    prompt([
+                        {
+                            type: "list",
+                            message: "Whose employees would you like to see?",
+                            name: "manager",
+                            choices: managers
+                        }
+                    ])
+                    .then ((response) => {
+                        db.viewEmployeesByManager(response.manager)
+                        .then(([response]) => {
+                            if(response.length > 0){
+                                console.table(response);
+                                loadPrompts();
+                            } else {
+                                console.log("This person is not in charge of anyone");
+                                loadPrompts();
+                            }
+                        })
+                    })
+                })
                 break;
             case "View_Employees_By_Department":
+                db.viewAllDepartments()
+                .then(([response]) => {
+                    const departments = response.map (({id, name}) => ({
+                        name: name,
+                        value: id
+                    }))
+                    prompt ([
+                        {
+                            type: "list",
+                            message: "Which department's workers would you like to see?",
+                            name: "department",
+                            choices: departments
+                        }
+                    ])
+                    .then((response) => {
+                        db.viewEmployeesByDepartment(response.department)
+                        .then (([response]) => {
+                            if (response.length >0){
+                                console.table(response);
+                                loadPrompts()
+                            } else
+                            {
+                                console.log("There is no one in this department");
+                                loadPrompts();
+                            }
+                        })
+                    })
+                })
                 break;
             case "Total_Utilized_Budget":
+                db.viewAllDepartments()
+                .then(([response]) => {
+                    const departments = response.map (({id, name}) => ({
+                        name: name,
+                        value: id
+                    }))
+                    prompt ([
+                        {
+                            type: "list",
+                            message: "Which department's total utilized budget would you like to see?",
+                            name: "department",
+                            choices: departments
+                        }
+                    ])
+                    .then ((response) => {
+                        console.log(response.department);
+                        db.totalUtilizedBudget(response.department)
+                        .then(([response]) => {
+                            console.table(response);
+                            loadPrompts();
+                        })
+                    })
+                })
                 break;
             case "Delete_Employee":
                 break;
