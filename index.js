@@ -112,19 +112,57 @@ loadPrompts = () => {
                         name: "Department",
                         message: "Enter Department Name"
                     }
-                    .then((response) => {
-                        let name = response.name;
-                        DB.insertDepartment(name)
-                        .then (() => {
-                            console.log(`Added ${name} to the department table`);
-                        })
-                        .then (() => {
-                            loadPrompts();
-                        })
-                    })
                 ])
+                .then(async(response) => {
+                    const name = response.Department;
+                    DB.insertDepartment(name)
+                    .then (() => {
+                        console.log(`Added ${name} to the department table`);
+                    })
+                    .then (() => {
+                        loadPrompts();
+                    })
+                })
                 break;
             case "Add_Role":
+                prompt([
+                    {
+                        type: "input",
+                        name: "title",
+                        message: "Enter Role Title"
+                    },
+                    {
+                        type: "input",
+                        name: "salary",
+                        message: "Enter Role Salary"
+                    },
+                ])
+                .then ((response) => {
+                    let answerTitle = response.title;
+                    let answerSalary = response.salary;
+                    DB.viewAllDepartments()
+                    .then(([response]) => {
+                        const depChoices = response.map(({id, name}) => ({
+                            name: name,
+                            value: id
+                        }))
+                        prompt([
+                            {
+                                type: "list",
+                                name: "role",
+                                message: "Select Role Department",
+                                choices: depChoices
+                            }])
+                            .then ((response) => {
+                                DB.insertRole(answerTitle, answerSalary, response.role)
+                                .then (() => {
+                                    console.log(`Added ${answerTitle} to the role table`)
+                                    loadPrompts();
+                                })
+                            })
+                            }
+                            )
+                        })
                 break;
             case "Add_Employee":
                 break;

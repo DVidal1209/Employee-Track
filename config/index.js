@@ -32,7 +32,7 @@ class DB {
     // Insert new Department query
     insertDepartment = (name) => {
         return this.connection.promise().query(
-            "INSERT INTO department(name) VALUE (?)", [name]
+            "INSERT INTO department(name) B"
         )
     }
 
