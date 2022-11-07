@@ -35,6 +35,8 @@ Once done you will have to run 2 sql files in order to create the database. To d
 Once done you can go ahead and exit the sql termina and execute the line "node run index.js".
 
 From here you may follow the instructions on screen to use the application.
+ 
+[Video link on usage](https://drive.google.com/file/d/16GYoBZxA1c-mW2WBs-qx0UDJo3qFM5mJ/view)
 
 
 ## Screenshots
